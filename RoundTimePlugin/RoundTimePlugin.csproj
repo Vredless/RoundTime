@@ -98,6 +98,7 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoundDefaultCommand.cs" />
     <Compile Include="RoundEventCommand.cs" />
     <Compile Include="RoundTimeCommand.cs" />
     <Compile Include="RoundTimePlugin.cs" />

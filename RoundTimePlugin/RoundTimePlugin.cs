@@ -15,17 +15,17 @@ namespace RoundTimePlugin
     {
         public override string Name => "RoundTime";
         public override string Author => "VredLess";
-        public override Version Version => new Version(1, 2, 0);
+        public override Version Version => new Version(1, 2, 1);
 
         internal static DateTime StartTime;
         internal static string roundstatus = "none";
         private CoroutineHandle nameUpdater;
-        private bool isroundstartedbool = false;
 
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+            nameUpdater = Timing.RunCoroutine(UpdateName());
             base.OnEnabled();
         }
         public override void OnDisabled()
@@ -37,14 +37,12 @@ namespace RoundTimePlugin
         }
         private void OnRoundStarted()
         {
-            isroundstartedbool = true;
             StartTime = DateTime.Now;
-            nameUpdater = Timing.RunCoroutine(UpdateName());
         }
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            isroundstartedbool = false;
-            Timing.KillCoroutines(nameUpdater);
+            roundstatus = "<color=#1750ad>Раунд окончен</color>";
+            StartTime = DateTime.Now;
         }
         private IEnumerator<float> UpdateName()
         {
@@ -52,13 +50,13 @@ namespace RoundTimePlugin
             {
                 var elapsed = DateTime.Now - StartTime;
                 // Format: BaseName [MM:SS]
-                if (isroundstartedbool == true)
+                if (Round.InProgress)
                 {
                     Server.Name = $"{Config.BaseServerName} <size=20>[ {roundstatus}: {elapsed:mm\\:ss} ]</size>";
                 }
                 else
                 {
-                    Server.Name = $"{Config.BaseServerName} <size=20><color=#53de3e>[ Ожидаем игроков ]</color></size>";
+                    Server.Name = $"{Config.BaseServerName} <size=20>[ <color=#53de3e>Ожидаем игроков</color> ]</size>";
                 }
                 yield return Timing.WaitForSeconds(Config.UpTimeAmount);
             }

@@ -8,15 +8,15 @@ using CommandSystem;
 namespace RoundTimePlugin
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public class RoundEventCommand : ICommand
+    public class RoundDefaultCommand : ICommand
     {
-        public string Command => "statusevent";
+        public string Command => "statusdefault";
         public string[] Aliases => Array.Empty<string>();
-        public string Description => "Sets server status to event via roundtime plugin";
+        public string Description => "Sets server status to default via roundtime plugin";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            RoundTimePlugin.roundstatus = "<color=#d4b728>Ивент идёт</color>";
+            RoundTimePlugin.roundstatus = "Раунд идёт";
             response = "Статус сервера успешно изменён!";
             return true;
         }
