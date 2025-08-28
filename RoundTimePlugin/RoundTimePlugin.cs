@@ -15,7 +15,7 @@ namespace RoundTimePlugin
     {
         public override string Name => "RoundTime";
         public override string Author => "VredLess";
-        public override Version Version => new Version(1, 2, 1);
+        public override Version Version => new Version(1, 2, 2);
 
         internal static DateTime StartTime;
         internal static string roundstatus = "none";
@@ -25,7 +25,6 @@ namespace RoundTimePlugin
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
-            nameUpdater = Timing.RunCoroutine(UpdateName());
             base.OnEnabled();
         }
         public override void OnDisabled()
@@ -37,6 +36,8 @@ namespace RoundTimePlugin
         }
         private void OnRoundStarted()
         {
+            Timing.KillCoroutines(nameUpdater);
+            nameUpdater = Timing.RunCoroutine(UpdateName());
             StartTime = DateTime.Now;
         }
         private void OnRoundEnded(RoundEndedEventArgs ev)
